@@ -7,7 +7,6 @@
 #ifndef SOCKET_H_
 #define SOCKET_H_
 
-
 #include <string>
 #include <iostream>
 #include <sys/types.h>       // For data types
@@ -18,6 +17,9 @@
 #include <netinet/in.h>      // For sockaddr_in
 #include <errno.h>           // For errno
 #include <cstring> 	     // For memset
+#include <vector>
+#include <ifaddrs.h>	     // For interface addresses
+
 #include "SocketException.hpp"
 
 class Socket {
@@ -38,6 +40,11 @@ public:
 	 * \brief Get the local port.
 	 */
 	unsigned short getLocalPort(void) throw(SocketException);
+
+	/*!
+	 * \brief Get the IP address.
+	 */
+	std::vector<std::string> getIPAddress(void) throw(SocketException);
 
 	/*!
 	 * \brief Set the local port.

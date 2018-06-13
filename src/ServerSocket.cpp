@@ -11,8 +11,11 @@
 ServerSocket::ServerSocket(unsigned short localPort) throw(SocketException):
 Socket(SOCK_STREAM, IPPROTO_TCP) 
 {	
-	// TODO: show current IP address where the server is running
-	cout << "init server : "<< getLocalAddress() << ":"<< localPort << " ... " << endl;
+
+	// TODO: Test that the IP addresses that is show is always the same where the the server is listening
+	std::vector<std::string> addresses = getIPAddress();
+	std::vector<std::string>::const_iterator i = addresses.begin();
+	cout << "Server listening: " <<  *i << ":" << localPort << " ... " << endl;
 	setLocalPort(localPort);
 	setListen();
 }
