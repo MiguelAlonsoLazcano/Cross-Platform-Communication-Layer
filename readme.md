@@ -20,16 +20,20 @@ Socket: Socket base class
 SocketException: Signal a problem with the execution of a socket call
 
 
-#### Host
+#### Host build
 
 ```c++
 A9-POC $ mkdir build
 A9-POC $ cd build
-A9-POC $ cmake ..
-A9-POC $ ./mainServer
+A9-POC $  cmake -DTOOLCHAIN=HOST ..
+A9-POC $ ./mainServer <PORT>
 ```
 
-#### Target
+#### Target build
 ```c++
-A9-POC $
+A9-POC $ mkdir build
+A9-POC $ cd build
+A9-POC $  cmake -DTOOLCHAIN=ARM ..
+A9-POC $ ./mainServer <PORT>
+```
 ```

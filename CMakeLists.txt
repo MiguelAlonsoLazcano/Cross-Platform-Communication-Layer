@@ -1,16 +1,27 @@
 #######################################################
-####################   A9 POC    ######################
+####################   PROJECT    #####################
 #######################################################
-
-
 cmake_minimum_required(VERSION 3.3)
 project(A9POC)
-
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(build-platforms)
 
 ######################  GTest #########################
-# TODO: Add GTEST support 
+# TODO: Add GTEST support
 #find_package(GTest REQUIRED)
 #include_directories(${GTEST_INCLUDE_DIRS})
+#######################################################
+
+######################  ARM CC ########################
+# TODO: Add ARM CC / CXX support
+# CC=arm-linux-gcc
+# CXX=arm-linux-g++
+# TODO: Configure TOOLCHAIN for specific target
+if("${TOOLCHAIN}" STREQUAL "ARM")
+     target_build()
+ elseif("${TOOLCHAIN}" STREQUAL "HOST")
+     host_build()
+endif()
 #######################################################
 
 
@@ -21,8 +32,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
 
 ####################### SHARED_LIB ####################
-# TODO: Implement shared object library 
-# add_library(serverSocket SHARED 
+# TODO: Implement shared object library
+# add_library(serverSocket SHARED
 #		src/Socket.cpp
 #		src/SocketException.cpp
 #		src/ServerSocket.cpp
@@ -34,7 +45,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 # set(SOCK_LIBRARY serverSocket.so)
 # target_link_libraries(mainServer "${SOCK_LIBRARY}")
 #######################################################
- 
+
 
 #######################  APP ##########################
 # add_executable(mainServer src/mainServer.cpp)
@@ -45,7 +56,7 @@ add_executable( mainServer
 		src/ServerSocket.cpp
 		src/Connection.cpp
 		src/ConnectionTCP.cpp
-		src/mainServer.cpp		
+		src/mainServer.cpp
 )
 # add_executable(mainServer src/mainServer.cpp)
 #######################################################
@@ -58,4 +69,3 @@ add_executable( mainServer
 # add_executable(runTests test/src/..)
 #target_link_libraries(runTests ${GTEST_LIBRARIES} pthread libcheckout.so)
 #######################################################
-

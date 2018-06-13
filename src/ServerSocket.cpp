@@ -11,7 +11,8 @@
 ServerSocket::ServerSocket(unsigned short localPort) throw(SocketException):
 Socket(SOCK_STREAM, IPPROTO_TCP) 
 {	
-	cout << "init server : " << localPort << "... " << endl;
+	// TODO: show current IP address where the server is running
+	cout << "init server : "<< getLocalAddress() << ":"<< localPort << " ... " << endl;
 	setLocalPort(localPort);
 	setListen();
 }

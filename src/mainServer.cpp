@@ -20,7 +20,7 @@ void HandleConnection(ConnectionTCP *conn);
 int main (int argc, char *argv[])
 {
 	if ( argc != 2 ) {
-		cerr << "Usage: " << argv[0] << "<PORT> " << endl;
+		cerr << "Usage: " << argv[0] << " <PORT> " << endl;
 		exit (1);
 	}
 
@@ -29,7 +29,8 @@ int main (int argc, char *argv[])
 	try {
 		// Create Server Socket object
 		ServerSocket server(PORT);
-		
+		// TODO : add socket.isOpen() call for a logical termination
+		// condition instead of while(1)
 		while(1) {
 			HandleConnection(server.accept());
 		}
