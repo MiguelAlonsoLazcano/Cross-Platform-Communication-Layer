@@ -57,8 +57,16 @@ add_executable( mainServer
 		src/Connection.cpp
 		src/ConnectionTCP.cpp
 		src/mainServer.cpp
-)
-# add_executable(mainServer src/mainServer.cpp)
+		)
+
+add_executable( connection
+		src/Socket.cpp
+		src/SocketException.cpp
+		src/ServerSocket.cpp
+		src/Connection.cpp
+		src/ConnectionTCP.cpp
+		src/clientConnection.cpp
+		)
 #######################################################
 
 
