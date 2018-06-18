@@ -9,6 +9,7 @@
 #include "ServerSocket.hpp"
 #include "SocketException.hpp"
 #include "ConnectionTCP.hpp"
+#include "ApplicationProtocol.hpp"
 
 using namespace std;
 
@@ -45,7 +46,7 @@ int main (int argc, char *argv[])
 
 void HandleConnection(ConnectionTCP *conn)
 {
-	cout << "Handling TCP Connection ";
+	message incoming_message;
 
 	try {
 		cout << conn->getRemoteAddress() << ":";
@@ -62,9 +63,30 @@ void HandleConnection(ConnectionTCP *conn)
 	char buffer[BUFFSIZE];
 	int recvMsg;
 
-	while ((recvMsg = conn->recv(buffer, BUFFSIZE)) > 0)
+	while ((recvMsg = conn->recv((char*) &incoming_message,sizeof(incoming_message))) > 0)
 	{
-		cout << "received: " << buffer << endl;
+		switch(incoming_message.type)
+		{
+			case MOTOR0:
+			{
+				actuator_data* data = (actuator_data*)&incoming_message.payload;
+				cout << "\tMOTOR0: " << data->value  << endl;
+				break;
+			}
+
+			case MOTOR1:
+			{
+				actuator_data* data = (actuator_data*)&incoming_message.payload;
+				cout << "\tMOTOR1: " << data->value  << endl;
+				break;
+			}
+			case SERVO0:
+			{
+				actuator_data* data = (actuator_data*)&incoming_message.payload;
+				cout << "\tSERVO0: " << data->value  << endl;
+				break;
+			}
+		}
 	}
 
 	delete conn;

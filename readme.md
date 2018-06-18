@@ -1,6 +1,6 @@
-## Object Oriented TCP / IP Server
+## Object Oriented TCP / IP Socket Model design in C++
 
-#### Socket Abstraction Model
+#### Socket Abstraction Layer
 
 * ServerSocket : Modeled to Server end
 * Connection   : Modeled to Client end
@@ -19,6 +19,11 @@ Socket: Socket base class
 
 SocketException: Signal a problem with the execution of a socket call
 
+ApplicationProtocol:  App level message model used for ::send & ::recv function calls.
+
+clientConnection: Client end user space application
+
+mainServer: Server end user user space application
 
 #### Host build
 
@@ -37,3 +42,9 @@ A9-POC $  cmake -DTOOLCHAIN=ARM ..
 A9-POC $ ./mainServer <PORT>
 ```
 ```
+
+
+
+
+
+

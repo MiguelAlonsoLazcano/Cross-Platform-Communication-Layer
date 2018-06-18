@@ -30,18 +30,16 @@ endif()
 link_directories(${CMAKE_SOURCE_DIR}/build)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-
 ####################### SHARED_LIB ####################
-# TODO: Implement shared object library
+# TODO: Create shared object for the Socket Abstraction Layer
+# 	libsal.so
 # add_library(serverSocket SHARED
 #		src/Socket.cpp
 #		src/SocketException.cpp
 #		src/ServerSocket.cpp
 #		src/Connection.cpp
 #		src/ConnectionTCP.cpp
-#)
-
-
+#	     )
 # set(SOCK_LIBRARY serverSocket.so)
 # target_link_libraries(mainServer "${SOCK_LIBRARY}")
 #######################################################
@@ -56,6 +54,7 @@ add_executable( mainServer
 		src/ServerSocket.cpp
 		src/Connection.cpp
 		src/ConnectionTCP.cpp
+		src/ApplicationProtocol.cpp
 		src/mainServer.cpp
 		)
 
@@ -65,6 +64,7 @@ add_executable( connection
 		src/ServerSocket.cpp
 		src/Connection.cpp
 		src/ConnectionTCP.cpp
+		src/ApplicationProtocol.cpp
 		src/clientConnection.cpp
 		)
 #######################################################
