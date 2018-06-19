@@ -30,7 +30,8 @@ mainServer: Server end user user space application
 ```c++
 A9-POC $ mkdir build
 A9-POC $ cd build
-A9-POC $  cmake -DTOOLCHAIN=HOST ..
+A9-POC $ cmake -DTOOLCHAIN=HOST ..
+A9-POC $ make
 A9-POC $ ./mainServer <PORT>
 ```
 
@@ -38,7 +39,8 @@ A9-POC $ ./mainServer <PORT>
 ```c++
 A9-POC $ mkdir build
 A9-POC $ cd build
-A9-POC $  cmake -DTOOLCHAIN=ARM ..
+A9-POC $ cmake -DTOOLCHAIN=ARM ..
+A9-POC $ make
 A9-POC $ ./mainServer <PORT>
 ```
 ```
