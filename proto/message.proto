@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package ApplicationProtocol;
+
+message Message {
+    required int32 value = 1;
+
+
+  enum MessageType {
+    MOTOR0 = 0;
+    MOTOR1 = 1;
+    SERVO0 = 2;
+  }
+
+}

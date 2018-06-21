@@ -3,6 +3,10 @@
 #######################################################
 cmake_minimum_required(VERSION 3.3)
 project(A9POC)
+
+################## LINK & INC DIR #####################
+link_directories(${CMAKE_SOURCE_DIR}/build)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(build-platforms)
 
@@ -25,10 +29,13 @@ endif()
 #######################################################
 
 
+####################  PROTBUFF ########################
+# TODO: Add Protobuf support
+find_package(Threads REQUIRED)
+add_subdirectory(proto)
 
-################## LINK & INC DIR #####################
-link_directories(${CMAKE_SOURCE_DIR}/build)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
+#######################################################
+
 
 ####################### SHARED_LIB ####################
 # TODO: Create shared object for the Socket Abstraction Layer
@@ -57,6 +64,7 @@ add_executable( mainServer
 		src/ApplicationProtocol.cpp
 		src/mainServer.cpp
 		)
+target_link_libraries(mainServer proto ${PROTOBUF_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
 add_executable( connection
 		src/Socket.cpp
@@ -67,6 +75,7 @@ add_executable( connection
 		src/ApplicationProtocol.cpp
 		src/clientConnection.cpp
 		)
+target_link_libraries(connection proto ${PROTOBUF_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 #######################################################
 
 
