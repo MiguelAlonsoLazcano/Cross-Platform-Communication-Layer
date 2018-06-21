@@ -36,46 +36,17 @@ add_subdirectory(proto)
 
 #######################################################
 
-
-####################### SHARED_LIB ####################
-# TODO: Create shared object for the Socket Abstraction Layer
-# 	libsal.so
-# add_library(serverSocket SHARED
-#		src/Socket.cpp
-#		src/SocketException.cpp
-#		src/ServerSocket.cpp
-#		src/Connection.cpp
-#		src/ConnectionTCP.cpp
-#	     )
-# set(SOCK_LIBRARY serverSocket.so)
-# target_link_libraries(mainServer "${SOCK_LIBRARY}")
-#######################################################
-
-
 #######################  APP ##########################
-# add_executable(mainServer src/mainServer.cpp)
-# target_link_libraries(mainServer serverSocket.so)
-add_executable( mainServer
-		src/Socket.cpp
-		src/SocketException.cpp
-		src/ServerSocket.cpp
-		src/Connection.cpp
-		src/ConnectionTCP.cpp
-		src/ApplicationProtocol.cpp
-		src/mainServer.cpp
-		)
-target_link_libraries(mainServer proto ${PROTOBUF_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-
-add_executable( connection
-		src/Socket.cpp
-		src/SocketException.cpp
-		src/ServerSocket.cpp
-		src/Connection.cpp
-		src/ConnectionTCP.cpp
-		src/ApplicationProtocol.cpp
-		src/clientConnection.cpp
-		)
-target_link_libraries(connection proto ${PROTOBUF_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+# SERVER
+add_executable(mainServer src/mainServer.cpp)
+target_link_libraries(mainServer socketAbst proto
+			${PROTOBUF_LIBRARY}
+			${CMAKE_THREAD_LIBS_INIT})
+# CLIENT
+add_executable(connection src/clientConnection.cpp)
+target_link_libraries(connection socketAbst proto
+			${PROTOBUF_LIBRARY}
+			${CMAKE_THREAD_LIBS_INIT})
 #######################################################
 
 
