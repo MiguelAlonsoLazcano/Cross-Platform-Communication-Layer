@@ -10,6 +10,10 @@ project(A9POC)
 link_directories(${CMAKE_SOURCE_DIR}/build)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(FindProtobuf)
+find_package(Protobuf REQUIRED)
+find_package(Threads  REQUIRED)
+
 include(build-platforms)
 #######################################################
 
@@ -43,15 +47,13 @@ add_subdirectory(src)
 
 #######################  APP ##########################
 # SERVER
-add_executable(mainServer src/mainServer.cpp)
+add_executable(mainServer src/serverProbuff.cpp)
 target_link_libraries(mainServer socketAbst proto
 			${PROTOBUF_LIBRARY}
-			${CMAKE_THREAD_LIBS_INIT})
+			${CMAKE_THREAD_LIBS_INIT} )
 # CLIENT
-add_executable(connection src/clientConnection.cpp)
+add_executable(connection src/clientProbuff.cpp)
 target_link_libraries(connection socketAbst proto
 			${PROTOBUF_LIBRARY}
-			${CMAKE_THREAD_LIBS_INIT})
+			${CMAKE_THREAD_LIBS_INIT} )
 #######################################################
-
-

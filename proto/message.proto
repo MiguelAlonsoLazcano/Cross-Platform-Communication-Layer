@@ -1,15 +1,19 @@
-syntax = "proto2";
+syntax = "proto3";
 
-package ApplicationProtocol;
+package AppMessage;
 
 message Message {
-    required int32 value = 1;
+     string device = 1;
+     string client = 2;
+     int32 value = 3;
 
-
-  enum MessageType {
+  enum type {
     MOTOR0 = 0;
     MOTOR1 = 1;
     SERVO0 = 2;
   }
 
 }
+
+
+
