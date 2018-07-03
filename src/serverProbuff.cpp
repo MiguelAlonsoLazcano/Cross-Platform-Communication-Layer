@@ -20,6 +20,8 @@ using namespace std;
 
 
 void HandleConnection(ConnectionTCP *conn);
+void ShowConnectionDetails(ConnectionTCP *conn);
+
 
 int main (int argc, char *argv[])
 {
@@ -49,25 +51,76 @@ int main (int argc, char *argv[])
 
 void HandleConnection(ConnectionTCP *conn)
 {
+
+	/*
+	 * Show connection details
+	 */
+	ShowConnectionDetails(conn);
+
 	/*
 	 * Setup a Message Object
 	 */
-	AppMessage::Message *message;
-	message = new AppMessage::Message();
+	AppMessage::Message message;
 
 	/*
 	 * Make a buffer that can hold message + room for a 32bit delimiter
 	 */
-	int messageSize = message->ByteSize()+4;
-	char* messageBuf = new char[messageSize];
+	int recvMsg = 0;
 
-	/*
-	 * Create Protobuf Object
-	 */
-	//google::protobuf::ClientDetails client;
+	// Read delimiter
+	char bite; int recv_bytes = 0; unsigned int length = 0;
+	int received = conn->recv(&bite, 1);
+	if (received < 0)
+		std::cout << "received " << received << std::endl;
+	else
+		recv_bytes += received;
+	length = (bite & 0x7f);
+	// For debugging
+	// std::cout << "received length " << length << std::endl;
+	char* messageBuf = new char[length];
 
+
+	recvMsg = conn->recv(messageBuf, length);
+		// For debugging
+		// std::cout << "received... " << recvMsg << std::endl;
+
+	// Read varint delimited protobuf object in to buffer
+	google::protobuf::io::ArrayInputStream arrayIn(messageBuf,recvMsg);
+	google::protobuf::io::CodedInputStream codedIn(&arrayIn);
+	google::protobuf::io::CodedInputStream::Limit msgLimit = codedIn.PushLimit(length);
+	message.ParseFromCodedStream(&codedIn);
+	codedIn.PopLimit(msgLimit);
+
+
+	switch(message.type())
+	{
+		case AppMessage::Message::MOTOR0:
+		{
+			cout << "\tMOTOR0: " << message.value()  << endl;
+			break;
+		}
+		case AppMessage::Message::MOTOR1:
+		{
+		cout << "\tMOTOR1: " << message.value()   << endl;
+			break;
+		}
+		case AppMessage::Message::SERVO0:
+		{
+			cout << "\tSERVO0: " << message.value()   << endl;
+			break;
+		}
+	}
+
+	delete conn;
+
+}
+
+
+
+void ShowConnectionDetails(ConnectionTCP *conn)
+{
 	try {
-		cout << "new connection from: " << conn->getRemoteAddress() << ":";
+		cout << "Connect  request: " << conn->getRemoteAddress() << ":";
 	} catch (SocketException &e) {
 		cerr << "Unable to get remote address" << endl;
 	}
@@ -77,47 +130,5 @@ void HandleConnection(ConnectionTCP *conn)
 	} catch (SocketException &e) {
 		cerr << "Unable to get remote port" << endl;
 	}
-
-
-	int recvMsg;
-
-	while ( (recvMsg = conn->recv((char*) &messageBuf,messageSize) ) > 0)
-	{
-		// Read varint delimited protobuf object in to buffer
-		google::protobuf::io::ArrayInputStream arrayIn(message,recvMsg);
-		google::protobuf::io::CodedInputStream codedIn(&arrayIn);
-		google::protobuf::uint32 size;
-		codedIn.ReadVarint32(&size);
-		google::protobuf::io::CodedInputStream::Limit msgLimit = codedIn.PushLimit(size);
-		message->ParseFromCodedStream(&codedIn);
-		codedIn.PopLimit(msgLimit);
-	}
-
-	delete conn;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

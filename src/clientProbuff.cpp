@@ -28,13 +28,17 @@ int main (int argc, char *argv[])
 	/*
 	 * Setup a Message Object
 	 */
-	AppMessage::Message *message;
-	message = new AppMessage::Message();
+	AppMessage::Message message;
+
+	message.set_value(100);
+	message.set_type(AppMessage::Message::SERVO0);
+
 
 	/*
 	 * Make a buffer that can hold message + room for a 32bit delimiter
 	 */
-	int messageSize = message->ByteSize()+4;
+	int variantSize = google::protobuf::io::CodedOutputStream::VarintSize32(message.ByteSize());
+	int messageSize = message.ByteSize()+variantSize;
 	char* messageBuf = new char[messageSize];
 
 
@@ -42,9 +46,16 @@ int main (int argc, char *argv[])
 	 * Write varint delimiter to buffer
 	 */
 	google::protobuf::io::ArrayOutputStream arrayOut(messageBuf, messageSize);
-	google::protobuf::io::CodedOutputStream codeOut(&arrayOut);
-	codeOut.WriteVarint32(message->ByteSize());
+	google::protobuf::io::CodedOutputStream codedOut(&arrayOut);
+	codedOut.WriteVarint32(message.ByteSize());
 
+	/*
+	 * Write Message Object to buffer
+	 */
+	message.SerializeToCodedStream(&codedOut);
+
+	// For debugging
+	//std::cout << "messageSize: " << messageSize << std::endl;
 
 	Connection *conn;
 	try {
@@ -57,7 +68,7 @@ int main (int argc, char *argv[])
 
 
 	try {
-		conn->send((char*) &messageBuf,  messageSize);
+		conn->send(messageBuf,  messageSize);
 
 	} catch(SocketException &e) {
 		std::cerr << e.what() << std::endl;

@@ -6,8 +6,9 @@ message Message {
      string device = 1;
      string client = 2;
      int32 value = 3;
+     Msgtype type = 4;
 
-  enum type {
+  enum Msgtype {
     MOTOR0 = 0;
     MOTOR1 = 1;
     SERVO0 = 2;
