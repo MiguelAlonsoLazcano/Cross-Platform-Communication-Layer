@@ -1,6 +1,6 @@
-/*! 
- *  \brief Brief Socket Class.   
- * 
+/*!
+ *  \brief Brief Socket Class.
+ *
  *  Socket base class representing basic communication endpoint
  */
 
@@ -13,7 +13,7 @@ using namespace std;
 Socket::Socket(int type, int protocol) throw(SocketException)
 {
 	// Make a new socket
-	if ((sockDesc = socket(PF_INET, type, protocol)) < 0) 
+	if ((sockDesc = socket(PF_INET, type, protocol)) < 0)
 		throw SocketException("Socket creation failed (socket())", true);
 }
 
@@ -64,15 +64,15 @@ void Socket::setLocalPort(unsigned short localPort) throw(SocketException)
 
 }
 
-void Socket::setLocalAddressAndPort(std::string &localAddress, unsigned short localPort) 
-throw(SocketException) 
+void Socket::setLocalAddressAndPort(std::string &localAddress, unsigned short localPort)
+throw(SocketException)
 {
-	
+
 	// Get the address of the requested host
 	sockaddr_in localAddr;
 	fillAddr(localAddress, localPort, localAddr);
 
-	if (bind(sockDesc, (sockaddr *) &localAddr, sizeof(sockaddr_in)) < 0) 
+	if (bind(sockDesc, (sockaddr *) &localAddr, sizeof(sockaddr_in)) < 0)
 		throw SocketException("Set of local address and port failed (bind())", true);
 
 }

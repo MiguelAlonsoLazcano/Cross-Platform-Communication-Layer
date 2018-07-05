@@ -1,5 +1,5 @@
-/*! 
- *  \brief Server Socket Class.   
+/*!
+ *  \brief Server Socket Class.
  *
  *  Server Class, constructs a TCP socket by default.
  */
@@ -9,10 +9,11 @@
 
 
 ServerSocket::ServerSocket(unsigned short localPort) throw(SocketException):
-Socket(SOCK_STREAM, IPPROTO_TCP) 
-{	
+Socket(SOCK_STREAM, IPPROTO_TCP)
+{
 
-	// TODO: Test that the IP addresses that is show is always the same where the the server is listening
+	// TODO: Test that the IP addresses that is show is always the same where the the server is listening.
+	// TODO: Refactory getIPAddress to a separate function call in order to reuse this lines.
 	std::vector<std::string> addresses = getIPAddress();
 	std::vector<std::string>::const_iterator i = addresses.begin();
 	cout << "Server listening: " <<  *i << ":" << localPort << " ... " << endl;
@@ -20,25 +21,25 @@ Socket(SOCK_STREAM, IPPROTO_TCP)
 	setListen();
 }
 
-ServerSocket::ServerSocket(std::string &localAddress, unsigned short localPort) 
-throw(SocketException) : Socket(SOCK_STREAM, IPPROTO_TCP) 
+ServerSocket::ServerSocket(std::string &localAddress, unsigned short localPort)
+throw(SocketException) : Socket(SOCK_STREAM, IPPROTO_TCP)
 {
-	
+
 	setLocalAddressAndPort(localAddress, localPort);
 	setListen();
 }
 
-ConnectionTCP *ServerSocket::accept() throw(SocketException) 
+ConnectionTCP *ServerSocket::accept() throw(SocketException)
 {
 
 	int newConnSD;
-	if ((newConnSD = ::accept(sockDesc, NULL, 0)) < 0) 
+	if ((newConnSD = ::accept(sockDesc, NULL, 0)) < 0)
 		throw SocketException("Accept failed (accept())", true);
 
 	return new ConnectionTCP(newConnSD);
 }
 
-void ServerSocket::setListen(void) throw(SocketException) 
+void ServerSocket::setListen(void) throw(SocketException)
 {
 
 	if (::listen(sockDesc, 1) < 0)

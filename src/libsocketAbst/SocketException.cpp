@@ -1,14 +1,14 @@
-/*! 
- *  \brief Socket Exception Class.   
- * 
+/*!
+ *  \brief Socket Exception Class.
+ *
  *  Socket Exception Class, signals a problem with the execution of a socket call.
  */
 
 #include "SocketException.hpp"
-         
 
-SocketException::SocketException(const string &message, bool inclSysMsg) throw(): 
-exceptionMessage(message) 
+
+SocketException::SocketException(const string &message, bool inclSysMsg) throw():
+exceptionMessage(message)
 {
 
 	if (inclSysMsg) {
@@ -19,7 +19,7 @@ exceptionMessage(message)
 
 SocketException::~SocketException() throw() { }
 
-const char *SocketException::what() const throw() 
+const char *SocketException::what() const throw()
 {
 
 	return exceptionMessage.c_str();
