@@ -25,15 +25,19 @@ public:
 	 */
 	SocketException(const string &message, bool inclSysMsg = false) throw();
 	
+
 	/*!
 	 * \brief Guarantee that no exceptions are thrown.
+	 * \param void.
 	 */
-	~SocketException() throw();
+	~SocketException(void) throw();
 
 	/*!
 	 * \brief Get exception message.
+	 * \param void.
+	 * \return Throw the exception message.
 	 */
-	const char *what() const throw();
+	const char *what(void) const throw();
 
 private:
   

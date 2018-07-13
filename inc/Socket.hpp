@@ -1,7 +1,7 @@
 /*! 
- *  \brief Brief Socket Class.   
+ *  \brief Socket Class.
  * 
- *  Socket base class representing basic communication endpoint
+ *  Socket base class representing basic communication endpoint.
  */
 
 #ifndef SOCKET_H_
@@ -13,7 +13,7 @@
 #include <sys/socket.h>      // For socket(), connect(), send(), and recv()
 #include <netdb.h>           // For gethostbyname()
 #include <arpa/inet.h>       // For inet_addr()
-#include <unistd.h>          // For close()
+#include <unistd.h>          // UNIX standard definitions
 #include <netinet/in.h>      // For sockaddr_in
 #include <errno.h>           // For errno
 #include <cstring> 	     // For memset
@@ -27,38 +27,50 @@ class Socket {
 public:
 
 	/*!
-	 * \brief Defaul destructor.
+	 * \brief Close this socket_handler destructor by calling close() system call.
+	 * \param void.
+	 * \return none.
 	 */
 	~Socket();
 
 	/*!
-	 * \brief Get the local address.
+	 * \brief Fetch the local address of this socket.
+	 * \param void.
+	 * \return Throw a SocketException in case of getsockname() system call failed.
 	 */
 	std::string getLocalAddress(void) throw(SocketException);
 
 	/*!
-	 * \brief Get the local port.
+	 * \brief Fetch the local port of this socket.
+	 * \param void.
+	 * \return Throw a SocketException in case of getsockname() system call failed.
 	 */
 	unsigned short getLocalPort(void) throw(SocketException);
 
 	/*!
-	 * \brief Get the IP address.
+	 * \brief Fetch the IP address of this socket.
+	 * \param void.
+	 * \return Throw a SocketException in case of getifaddrs() system call failed.
 	 */
 	std::vector<std::string> getIPAddress(void) throw(SocketException);
 
 	/*!
-	 * \brief Set the local port.
+	 * \brief Bind the given port to this socket local port.
+	 * \param int port.
+	 * \return Throw a SocketException in case of bind() system call failed.
 	 */
 	void setLocalPort(unsigned short localPort) throw(SocketException);
 
 	/*!
-	 * \brief Set the local address and port.
+	 * \brief Bind the given address and port to this socket local address and local port.
+	 * \param string address.
+	 * \param int port.
+	 * \return Throw a SocketException in case of bind() system call failed.
 	 */
 	void setLocalAddressAndPort(std::string &localAddress, unsigned short localPort) throw(SocketException);
 
 	/*!
-	 * \brief Resolve the specified service for the specified protocol. 
-	 * The default protocol is "tcp".
+	 * TODO: Resolve the service for the specified protocol. The default protocol is "tcp".
 	 */
 	static unsigned short resolveService(const std::string &service, const std::string &protocol = "tcp") throw(SocketException);
 
@@ -74,13 +86,25 @@ private:
 protected:
 
 	/*! 	
-	 * \brief Socket descriptor. 
+	 * \brief Socket handler.
 	 */
-	int sockDesc;             
+	int socket_handler;
 
+	/*!
+	 * \brief Socket constructor, creates a socket endpoint.
+	 * \param int socket type.
+	 * \param int connection protocol.
+	 * \return Throw a SocketException in case of socket() systme call failed.
+	 */
 	Socket(int type, int protocol) throw(SocketException);
 
-	Socket(int sockDesc);	
+	/*!
+	 * \brief Socket constructor, creates a socket endpoint, asigns the given socket_handler to
+	 * this->socket_handler.
+	 * \param int socket handler.
+	 * \return Throw a SocketException in case of invalid socket_handler is given.
+	 */
+	Socket(int socket_handler) throw(SocketException);
 
 };
 
