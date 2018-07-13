@@ -13,19 +13,21 @@ using namespace std;
 Socket::Socket(int type, int protocol) throw(SocketException)
 {
 	// Make a new socket
-	if ((sockDesc = socket(PF_INET, type, protocol)) < 0)
+	if ((socket_handler = ::socket(PF_INET, type, protocol)) < 0)
 		throw SocketException("Socket creation failed (socket())", true);
 }
 
-Socket::Socket(int sockDesc)
+Socket::Socket(int socket_handler) throw(SocketException)
 {
-	this->sockDesc = sockDesc;
+	if (socket_handler < 0 )
+		throw SocketException("Invalid socket_handler in (Socket(socket_handler))", true);
+	this->socket_handler = socket_handler;
 }
 
 Socket::~Socket() {
 
-	::close(sockDesc);
-	sockDesc = -1;
+	::close(socket_handler);
+	socket_handler = -1;
 }
 
 string Socket::getLocalAddress() throw(SocketException)
@@ -33,7 +35,7 @@ string Socket::getLocalAddress() throw(SocketException)
 	sockaddr_in addr;
 	unsigned int addr_len = sizeof(addr);
 
-	if (getsockname(sockDesc, (sockaddr *) &addr, (socklen_t *) &addr_len) < 0)
+	if (getsockname(socket_handler, (sockaddr *) &addr, (socklen_t *) &addr_len) < 0)
 		throw SocketException("Fetch of local address failed (getsockname())", true);
 
 	return inet_ntoa(addr.sin_addr);
@@ -44,7 +46,7 @@ unsigned short Socket::getLocalPort() throw(SocketException)
 	sockaddr_in addr;
 	unsigned int addr_len = sizeof(addr);
 
-	if (getsockname(sockDesc, (sockaddr *) &addr, (socklen_t *) &addr_len) < 0)
+	if (getsockname(socket_handler, (sockaddr *) &addr, (socklen_t *) &addr_len) < 0)
 		throw SocketException("Fetch of local port failed (getsockname())", true);
 
 	return ntohs(addr.sin_port);
@@ -59,7 +61,7 @@ void Socket::setLocalPort(unsigned short localPort) throw(SocketException)
 	localAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	localAddr.sin_port = htons(localPort);
 
-	if (bind(sockDesc, (sockaddr *) &localAddr, sizeof(sockaddr_in)) < 0)
+	if (bind(socket_handler, (sockaddr *) &localAddr, sizeof(sockaddr_in)) < 0)
 		throw SocketException("Set of local port failed (bind())", true);
 
 }
@@ -72,14 +74,13 @@ throw(SocketException)
 	sockaddr_in localAddr;
 	fillAddr(localAddress, localPort, localAddr);
 
-	if (bind(sockDesc, (sockaddr *) &localAddr, sizeof(sockaddr_in)) < 0)
+	if (bind(socket_handler, (sockaddr *) &localAddr, sizeof(sockaddr_in)) < 0)
 		throw SocketException("Set of local address and port failed (bind())", true);
 
 }
 
 // Get a Vector of the IP addresses of this computer
-std::vector<std::string> Socket::getIPAddress()
-throw(SocketException) {
+std::vector<std::string> Socket::getIPAddress() throw(SocketException) {
 
 	std::vector<std::string> IPAddresses;
 	int TempAddress = 0;
@@ -120,8 +121,9 @@ throw(SocketException) {
 		//Release the interface memory
 		freeifaddrs(ifap);
 		ifap = NULL;
+	} else {
+		throw SocketException("Unable to fetch ip addresses from this machine (getifaddrs())", true);
 	}
-
 	return IPAddresses;
 }
 

@@ -67,7 +67,7 @@ public:
 	 * \param int port.
 	 * \return Throw a SocketException in case of bind() system call failed.
 	 */
-	void setLocalAddressAndPort(std::string &localAddress, unsigned short localPort) throw(SocketException);
+	void setLocalAddressAndPort(std::string &local_address, unsigned short local_port) throw(SocketException);
 
 	/*!
 	 * TODO: Resolve the service for the specified protocol. The default protocol is "tcp".

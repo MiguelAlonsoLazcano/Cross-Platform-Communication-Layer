@@ -20,7 +20,7 @@ throw(SocketException) {
 	fillAddr(remoteAddress, remotePort, destAddr);
 
 	// Try to connect to the given port
-	if (::connect(sockDesc, (sockaddr *) &destAddr, sizeof(destAddr)) < 0)
+	if (::connect(socket_handler, (sockaddr *) &destAddr, sizeof(destAddr)) < 0)
 		throw SocketException("Connect failed (connect())", true);
 
 }
@@ -28,7 +28,7 @@ throw(SocketException) {
 void Connection::send(const void *buffer, int bufferLen) throw(SocketException)
 {
 
-	if (::send(sockDesc, (void *) buffer, bufferLen, 0) < 0)
+	if (::send(socket_handler, (void *) buffer, bufferLen, 0) < 0)
 		throw SocketException("Send failed (send())", true);
 }
 
@@ -36,7 +36,7 @@ int Connection::recv(void *buffer, int bufferLen) throw(SocketException)
 {
 
 	int rtn;
-	if ((rtn = ::recv(sockDesc, (void *) buffer, bufferLen, 0)) < 0)
+	if ((rtn = ::recv(socket_handler, (void *) buffer, bufferLen, 0)) < 0)
 		throw SocketException("Received failed (recv())", true);
 	return rtn;
 }
@@ -47,7 +47,7 @@ std::string Connection::getRemoteAddress() throw(SocketException)
 	sockaddr_in addr;
 	unsigned int addr_len = sizeof(addr);
 
-	if (getpeername(sockDesc, (sockaddr *) &addr,(socklen_t *) &addr_len) < 0)
+	if (getpeername(socket_handler, (sockaddr *) &addr,(socklen_t *) &addr_len) < 0)
 		throw SocketException("Fetch of foreign address failed (getpeername())", true);
 
 	return inet_ntoa(addr.sin_addr);
@@ -59,7 +59,7 @@ unsigned short Connection::getRemotePort() throw(SocketException)
 	sockaddr_in addr;
 	unsigned int addr_len = sizeof(addr);
 
-	if (getpeername(sockDesc, (sockaddr *) &addr, (socklen_t *) &addr_len) < 0)
+	if (getpeername(socket_handler, (sockaddr *) &addr, (socklen_t *) &addr_len) < 0)
 		throw SocketException("Fetch of foreign port failed (getpeername())", true);
 
 	return ntohs(addr.sin_port);

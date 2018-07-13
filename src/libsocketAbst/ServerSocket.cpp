@@ -8,7 +8,7 @@
 #include "ConnectionTCP.hpp"
 
 
-ServerSocket::ServerSocket(unsigned short localPort) throw(SocketException):
+ServerSocket::ServerSocket(unsigned short local_port) throw(SocketException):
 Socket(SOCK_STREAM, IPPROTO_TCP)
 {
 
@@ -16,16 +16,16 @@ Socket(SOCK_STREAM, IPPROTO_TCP)
 	// TODO: Refactory getIPAddress to a separate function call in order to reuse this lines.
 	std::vector<std::string> addresses = getIPAddress();
 	std::vector<std::string>::const_iterator i = addresses.begin();
-	cout << "Server listening: " <<  *i << ":" << localPort << " ... " << endl;
-	setLocalPort(localPort);
+	cout << "Server listening: " <<  *i << ":" << local_port << " ... " << endl;
+	setLocalPort(local_port);
 	setListen();
 }
 
-ServerSocket::ServerSocket(std::string &localAddress, unsigned short localPort)
+ServerSocket::ServerSocket(std::string &local_address, unsigned short local_port)
 throw(SocketException) : Socket(SOCK_STREAM, IPPROTO_TCP)
 {
 
-	setLocalAddressAndPort(localAddress, localPort);
+	setLocalAddressAndPort(local_address, local_port);
 	setListen();
 }
 
@@ -33,7 +33,7 @@ ConnectionTCP *ServerSocket::accept() throw(SocketException)
 {
 
 	int newConnSD;
-	if ((newConnSD = ::accept(sockDesc, NULL, 0)) < 0)
+	if ((newConnSD = ::accept(socket_handler, NULL, 0)) < 0)
 		throw SocketException("Accept failed (accept())", true);
 
 	return new ConnectionTCP(newConnSD);
@@ -42,6 +42,6 @@ ConnectionTCP *ServerSocket::accept() throw(SocketException)
 void ServerSocket::setListen(void) throw(SocketException)
 {
 
-	if (::listen(sockDesc, 1) < 0)
+	if (::listen(socket_handler, 1) < 0)
 		throw SocketException("Set listening socket failed (listen())", true);
 }

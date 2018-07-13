@@ -17,7 +17,7 @@ throw(SocketException) : Connection(SOCK_STREAM, IPPROTO_TCP)
 	connect(remoteAddress, remotePort);
 }
 
-ConnectionTCP::ConnectionTCP (int newConnSD) : Connection(newConnSD)
+ConnectionTCP::ConnectionTCP (int newConnSD) throw(SocketException): Connection(newConnSD)
 {
 
 }
