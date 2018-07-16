@@ -7,8 +7,10 @@
 #include <cstdlib>
 #include <iostream>
 #include "ServerSocket.hpp"
+#include "MotorPort.hpp"
 #include "SocketException.hpp"
 #include "ConnectionTCP.hpp"
+#include "ApplicationProtocol.hpp"
 #include "../build/proto/message.pb.h"
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
@@ -25,12 +27,13 @@ void ShowConnectionDetails(ConnectionTCP *conn);
 
 int main (int argc, char *argv[])
 {
-	if ( argc != 2 ) {
-		cerr << "Usage: " << argv[0] << " <PORT> " << endl;
+	if ( argc != 3 ) {
+		cerr << "Usage: " << argv[0] << " <PORT> <SERIAL_DEVICE>" << endl;
 		exit (1);
 	}
 
 	unsigned short PORT = atoi(argv[1]);
+	char* DEVICE = (char*)argv[2];
 
 	try {
 		// Create Server Socket object
@@ -96,11 +99,64 @@ void HandleConnection(ConnectionTCP *conn)
 	{
 		case AppMessage::Message::MOTOR0:
 		{
-			cout << "\tMOTOR0: " << message.value()  << endl;
+			char* PORT = (char*)"/dev/ttyUSB0";
+			MotorPort *motor;
+
+			cout << "\treceived: MOTOR0: " << message.value()  << endl;
+
+			//////////////////////////
+			// Prepare Service Message
+			/*
+				int address;
+				bool operation;
+				int length;
+				int data;
+				int crc;
+			*/
+
+			message_data outgoing_message;
+			actuator_data data;
+			data.address = 1;
+			data.operation = true;
+			data.length = sizeof(data);
+			data.data = message.value();
+			data.crc = 1;
+			memcpy((void*)outgoing_message.payload, (void*) &data, sizeof(data));
+
+
+
+
+			try {
+				// Create serial object
+				motor = new MotorPort(PORT);
+			} catch (SerialException &e) {
+				cerr << e.what() << endl;
+				exit(1);
+			}
+
+				cout << "\tmotor 0 end point created " << endl;
+			try {
+				motor->send((char*) &outgoing_message,  sizeof(outgoing_message));
+			} catch(SerialException &e) {
+				std::cerr << e.what() << std::endl;
+			}
+
+				cout << "\tsend succedded.." << endl;
 			break;
+
 		}
 		case AppMessage::Message::MOTOR1:
 		{
+			char* PORT = (char*)"/dev/ttyUSB0";
+			MotorPort *motorB;
+			try {
+				// Create serial object
+				motorB = new MotorPort(PORT);
+			} catch (SerialException &e) {
+				cerr << e.what() << endl;
+				exit(1);
+			}
+			cout << "motor 1 end point created " << endl;
 		cout << "\tMOTOR1: " << message.value()   << endl;
 			break;
 		}

@@ -31,7 +31,7 @@ int main (int argc, char *argv[])
 	AppMessage::Message message;
 
 	message.set_value(100);
-	message.set_type(AppMessage::Message::SERVO0);
+	message.set_type(AppMessage::Message::MOTOR0);
 
 
 	/*
@@ -66,7 +66,7 @@ int main (int argc, char *argv[])
 		exit(1);
 	}
 
-
+	// TODO: Create and send messages from an interactive user input
 	try {
 		conn->send(messageBuf,  messageSize);
 

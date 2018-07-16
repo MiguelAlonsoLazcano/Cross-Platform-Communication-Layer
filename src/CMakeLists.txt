@@ -7,5 +7,12 @@ add_library(socketAbst SHARED
 		libsocketAbst/ServerSocket.cpp
 		libsocketAbst/Connection.cpp
 		libsocketAbst/ConnectionTCP.cpp
+		libsocketAbst/ApplicationProtocol.cpp
+	     )
+
+add_library(serialPort SHARED
+		libSerial/SerialPort.cpp
+		libSerial/SerialException.cpp
+		libSerial/MotorPort.cpp
 	     )
 

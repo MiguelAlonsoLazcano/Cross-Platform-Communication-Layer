@@ -12,7 +12,7 @@ enum message_types { MOTOR0 = 0, MOTOR1 = 1, SERVO0 = 2};
 
 
 
-struct message
+struct message_data
 {
 	message_types type;
 	char payload[PAYLOAD_SIZE];
@@ -21,7 +21,11 @@ struct message
 
 struct actuator_data
 {
-	int value;
+	int address;
+	bool operation;
+	int length;
+	int data;
+	int crc;
 };
 
 

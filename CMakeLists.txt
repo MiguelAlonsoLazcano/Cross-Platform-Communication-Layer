@@ -48,7 +48,7 @@ add_subdirectory(src)
 #######################  APP ##########################
 # SERVER
 add_executable(mainServer src/serverProbuff.cpp)
-target_link_libraries(mainServer socketAbst proto
+target_link_libraries(mainServer socketAbst serialPort proto
 			${PROTOBUF_LIBRARY}
 			${CMAKE_THREAD_LIBS_INIT} )
 # CLIENT

@@ -8,16 +8,21 @@
 #### Classes
 
 Socket: Socket base class
-
-	-> ServerSocket: Server socket, TCP by default
-
-	-> Connection: Establish a socket connection with the given address & port
-
-        	-> ConnectionTCP: TCP Connection for communicate with a TCP Server
-
-          	-> ConnectionUDP: UDP Connection for Communicate with a UDP Server
+ - ServerSocket: Server socket, TCP by default
+ - Connection: Establish a socket connection with the given address & port
+   - ConnectionTCP: TCP Connection for communicate with a TCP Server
+   - ConnectionUDP: UDP Connection for Communicate with a UDP Server
 
 SocketException: Signal a problem with the execution of a socket call
+
+
+SerialPort: Responsible for sending commnads depending on user's input
+
+MotorPort: Interface to control DC Motor
+
+ServoPort: Interface to control Servo Motor. No yet implemented.
+
+ServiceLog: Responsible to log all information for debugging purposes. No yet implemented.
 
 clientConnection: Client end user space application
 
