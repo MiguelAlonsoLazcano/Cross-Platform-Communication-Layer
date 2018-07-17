@@ -46,7 +46,6 @@ int main (int argc, char *argv[])
 
 void HandleConnection(ConnectionTCP *conn)
 {
-	//message incoming_message;
 	string incoming_message;
 
 	try {
