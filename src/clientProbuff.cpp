@@ -24,14 +24,64 @@ int main (int argc, char *argv[])
 	unsigned short PORT = atoi(argv[2]);
 	std::cout << "connecting to " << ADDRESS << ":" << PORT << endl;
 
-
 	/*
 	 * Setup a Message Object
 	 */
 	AppMessage::Message message;
 
-	message.set_value(100);
-	message.set_type(AppMessage::Message::MOTOR0);
+
+	/*
+	 * Create and send message from an interactive user input
+	 */
+	int TYPE, VALUE;
+	cout << "\tEnter device: (0) Motor0, (1) Motor1, (2) Servo: ";
+	cin >> TYPE;
+
+	switch(TYPE)
+	{
+		case 0:
+			message.set_type(AppMessage::Message::MOTOR0);
+			cout << "\tEnter value: [0 -- 100] for Motor: ";
+			cin >> VALUE;
+			if (VALUE >= 0 && VALUE <= 100)
+				message.set_value(VALUE);
+			else
+			{
+				cout << "\t\tInvalid value.. exit" << endl ;
+				exit(1);
+			}
+			break;
+		case 1:
+			message.set_type(AppMessage::Message::MOTOR1);
+			cout << "\tEnter value: [0 -- 100] for Motor: ";
+			cin >> VALUE;
+			if (VALUE >= 0 && VALUE <= 100)
+				message.set_value(VALUE);
+			else
+			{
+				cout << "\t\tInvalid value.. exit" << endl ;
+				exit(1);
+			}
+			break;
+		case 2:
+			message.set_type(AppMessage::Message::SERVO0);
+			cout << "\tEnter value: [-15 -- +15] for Servo: ";
+			cin >> VALUE;
+			if (VALUE >= -15 && VALUE <= 15)
+				message.set_value(VALUE);
+			else
+			{
+				cout << "\t\tInvalid value.. exit" << endl ;
+				exit(1);
+			}
+			break;
+		default:
+			cout << "\tInvalid device.. exit" << endl;
+			exit(1);
+	}
+
+	cout << "MESSAGE(" << TYPE << ", " << VALUE << ")" << endl;
+
 
 
 	/*
@@ -66,7 +116,7 @@ int main (int argc, char *argv[])
 		exit(1);
 	}
 
-	// TODO: Create and send messages from an interactive user input
+
 	try {
 		conn->send(messageBuf,  messageSize);
 
