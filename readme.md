@@ -64,5 +64,9 @@ A9-POC $ [gdb|cgdb]./connection <ADDR> <PORT>
 ```
 
 
-#### Setup Connection Flow
+#### Setup Connection
 ![Alt text]( doc/img/Setup_Connection-Page-2.png "Title")
+
+
+#### Read a message
+![Alt text]( doc/img/Setup_Connection-Page-3.png "Title")
