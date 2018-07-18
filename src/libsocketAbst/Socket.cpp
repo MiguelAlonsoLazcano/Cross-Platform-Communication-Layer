@@ -25,7 +25,7 @@ Socket::Socket(int socket_handler) throw(SocketException)
 }
 
 Socket::~Socket() {
-
+	std::cout << "Connection close" << std::endl;
 	::close(socket_handler);
 	socket_handler = -1;
 }

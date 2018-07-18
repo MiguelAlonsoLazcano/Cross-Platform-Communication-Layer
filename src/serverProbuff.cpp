@@ -24,6 +24,7 @@ using namespace std;
 void HandleConnection(ConnectionTCP *conn);
 void ShowConnectionDetails(ConnectionTCP *conn);
 
+char* DEVICE;
 
 int main (int argc, char *argv[])
 {
@@ -33,7 +34,7 @@ int main (int argc, char *argv[])
 	}
 
 	unsigned short PORT = atoi(argv[1]);
-	char* DEVICE = (char*)argv[2];
+	DEVICE = (char*)argv[2];
 
 	try {
 		// Create Server Socket object
@@ -99,10 +100,8 @@ void HandleConnection(ConnectionTCP *conn)
 	{
 		case AppMessage::Message::MOTOR0:
 		{
-			char* PORT = (char*)"/dev/ttyUSB0";
 			MotorPort *motor;
-
-			cout << "\treceived: MOTOR0: " << message.value()  << endl;
+			cout << "MESSAGE(0, " << message.value() << ")"  << endl;
 
 			//////////////////////////
 			// Prepare Service Message
@@ -123,12 +122,9 @@ void HandleConnection(ConnectionTCP *conn)
 			data.crc = 1;
 			memcpy((void*)outgoing_message.payload, (void*) &data, sizeof(data));
 
-
-
-
 			try {
 				// Create serial object
-				motor = new MotorPort(PORT);
+				motor = new MotorPort(DEVICE);
 			} catch (SerialException &e) {
 				cerr << e.what() << endl;
 				exit(1);
@@ -141,28 +137,93 @@ void HandleConnection(ConnectionTCP *conn)
 				std::cerr << e.what() << std::endl;
 			}
 
-				cout << "\tsend succedded.." << endl;
+				cout << "\tsend to serial port succedded.." << endl;
 			break;
 
 		}
 		case AppMessage::Message::MOTOR1:
 		{
-			char* PORT = (char*)"/dev/ttyUSB0";
-			MotorPort *motorB;
+			MotorPort *motor;
+			cout << "MESSAGE(1, " << message.value() << ")"  << endl;
+
+			//////////////////////////
+			// Prepare Service Message
+			/*
+				int address;
+				bool operation;
+				int length;
+				int data;
+				int crc;
+			*/
+
+			message_data outgoing_message;
+			actuator_data data;
+			data.address = 1;
+			data.operation = true;
+			data.length = sizeof(data);
+			data.data = message.value();
+			data.crc = 1;
+			memcpy((void*)outgoing_message.payload, (void*) &data, sizeof(data));
+
 			try {
 				// Create serial object
-				motorB = new MotorPort(PORT);
+				motor = new MotorPort(DEVICE);
 			} catch (SerialException &e) {
 				cerr << e.what() << endl;
 				exit(1);
 			}
-			cout << "motor 1 end point created " << endl;
-		cout << "\tMOTOR1: " << message.value()   << endl;
+
+				cout << "\tmotor 1 end point created " << endl;
+			try {
+				motor->send((char*) &outgoing_message,  sizeof(outgoing_message));
+			} catch(SerialException &e) {
+				std::cerr << e.what() << std::endl;
+			}
+
+				cout << "\tsend to serial port succedded.." << endl;
 			break;
 		}
 		case AppMessage::Message::SERVO0:
 		{
-			cout << "\tSERVO0: " << message.value()   << endl;
+			// TODO: create the respective ServoPort class to handle this case
+			MotorPort *motor;
+			cout << "MESSAGE(2, " << message.value() << ")"  << endl;
+
+			//////////////////////////
+			// Prepare Service Message
+			/*
+				int address;
+				bool operation;
+				int length;
+				int data;
+				int crc;
+			*/
+
+			message_data outgoing_message;
+			actuator_data data;
+			data.address = 1;
+			data.operation = true;
+			data.length = sizeof(data);
+			data.data = message.value();
+			data.crc = 1;
+			memcpy((void*)outgoing_message.payload, (void*) &data, sizeof(data));
+
+			try {
+				// Create serial object
+				motor = new MotorPort(DEVICE);
+			} catch (SerialException &e) {
+				cerr << e.what() << endl;
+				exit(1);
+			}
+
+				cout << "\tservo 0 end point created " << endl;
+			try {
+				motor->send((char*) &outgoing_message,  sizeof(outgoing_message));
+			} catch(SerialException &e) {
+				std::cerr << e.what() << std::endl;
+			}
+
+				cout << "\tsend to serial port succedded.." << endl;
 			break;
 		}
 	}

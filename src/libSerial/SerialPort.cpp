@@ -50,7 +50,7 @@ void SerialPort::setSerialInterface(int speed, int parity) throw(SerialException
 
         tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
 					// ignore modem controls,
-	tty.c_cflag |= (CLOCAL | CREAD);// enable reading
+        tty.c_cflag |= (CLOCAL | CREAD);// enable reading
 
         tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
         tty.c_cflag |= parity;
