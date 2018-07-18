@@ -12,6 +12,7 @@
 #include <fcntl.h> 	     // File control definitions
 #include <termios.h>	     // POSIX terminal control definitions
 #include <cstring> 	     // For memset
+#include <iostream>
 
 class SerialPort {
 

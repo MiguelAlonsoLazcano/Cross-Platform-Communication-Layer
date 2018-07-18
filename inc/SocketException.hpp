@@ -10,6 +10,7 @@
 #include <string>            
 #include <cstring>
 #include <exception>
+#include <cerrno>
        
 using namespace std;
 

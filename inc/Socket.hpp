@@ -19,6 +19,9 @@
 #include <cstring> 	     // For memset
 #include <vector>
 #include <ifaddrs.h>	     // For interface addresses
+#include <cstdlib>
+#include <cstdio>
+
 
 #include "SocketException.hpp"
 
